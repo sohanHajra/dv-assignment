@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Automobile Performance Dashboard</title>
+  <!-- Load Vega & Vega-Lite -->
+  <script src="https://cdn.jsdelivr.net/npm/vega@5.25.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5.14.1"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.22.2"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    h1 { color: #333; }
+    p { color: #666; margin-bottom: 20px; }
+    #dashboard {
+      background: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <h1>Automobile Performance & Origin</h1>
+  <p><strong>Interactive features:</strong> Click and drag on the scatterplot to filter the bar chart. Click a bar on the bar chart to filter the scatterplot. Hover over points for details.</p>
+  
+  <div id="dashboard"></div>
+
+  <script>
+    const spec = {
+      "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+      "data": {"url": "https://raw.githubusercontent.com/vega/vega-datasets/next/data/cars.json"},
+      "spacing": 40,
+      "hconcat": [
+        {
+          "title": "Horsepower vs. Fuel Efficiency",
+          "params": [{"name": "brush", "select": "interval"}],
+          "mark": {"type": "point", "size": 60, "filled": true},
+          "encoding": {
+            "x": {"field": "Horsepower", "type": "quantitative"},
+            "y": {"field": "Miles_per_Gallon", "type": "quantitative", "title": "Miles per Gallon"},
+            "color": {
+              "condition": {"param": "click", "field": "Origin", "type": "nominal"},
+              "value": "lightgray"
+            },
+            "opacity": {
+              "condition": {"param": "brush", "value": 0.8},
+              "value": 0.1
+            },
+            "tooltip": [
+              {"field": "Name", "type": "nominal"},
+              {"field": "Origin", "type": "nominal"},
+              {"field": "Horsepower", "type": "quantitative"},
+              {"field": "Miles_per_Gallon", "type": "quantitative"}
+            ]
+          }
+        },
+        {
+          "title": "Vehicle Count by Origin",
+          "params": [{"name": "click", "select": {"type": "point", "encodings": ["color"]}}],
+          "mark": "bar",
+          "encoding": {
+            "y": {"field": "Origin", "type": "nominal", "sort": "-x"},
+            "x": {"aggregate": "count", "type": "quantitative", "title": "Number of Vehicles"},
+            "color": {
+              "condition": {"param": "brush", "field": "Origin", "type": "nominal"},
+              "value": "lightgray"
+            },
+            "opacity": {
+              "condition": {"param": "click", "value": 1},
+              "value": 0.2
+            },
+            "tooltip": [
+              {"field": "Origin", "type": "nominal"},
+              {"aggregate": "count", "type": "quantitative", "title": "Count"}
+            ]
+          }
+        }
+      ]
+    };
+
+    vegaEmbed('#dashboard', spec, {actions: false});
+  </script>
+</body>
+</html>
