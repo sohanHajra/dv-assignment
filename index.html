@@ -1,18 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <!-- d3-annotation library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
-  <style> /* Add basic CSS for your SVG and buttons */ </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2017 Automobile Fuel Efficiency</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js"></script>
 </head>
 <body>
-  <h1>2017 Automobile Fuel Efficiency</h1>
-  <div id="controls">
-    <button id="prevBtn">Previous</button>
-    <button id="nextBtn">Next</button>
-  </div>
-  <svg id="chart" width="800" height="600"></svg>
-  <script src="script.js"></script>
+    <div class="container">
+        <header>
+            <h1 id="scene-title">Overview: Fuel Efficiency</h1>
+            <p id="scene-description">Loading data...</p>
+        </header>
+        
+        <div class="controls">
+            <button id="prevBtn" disabled>Previous Scene</button>
+            <div id="filter-controls" class="hidden">
+                <button data-cyl="All" class="active">All</button>
+                <button data-cyl="0">0 (EVs)</button>
+                <button data-cyl="4">4 Cyl</button>
+                <button data-cyl="6">6 Cyl</button>
+                <button data-cyl="8">8 Cyl</button>
+            </div>
+            <button id="nextBtn" disabled>Next Scene</button>
+        </div>
+
+        <div id="chart-container">
+            <svg id="chart"></svg>
+            <div id="tooltip" class="tooltip hidden"></div>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
